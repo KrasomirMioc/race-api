@@ -1,0 +1,99 @@
+{
+  "fullName": "Matthias Floyd",
+  "finishTime": "5:15:24",
+  "distance": "medium",
+  "ageCategory": "M18-25",
+  "overallPlace": 0,
+  "ageCategoryPlace": 0,
+  "race": "/api/races/1"
+}
+
+{
+  "fullName": "Toby Phillips",
+  "finishTime": "4:07:45",
+  "distance": "long",
+  "ageCategory": "M26-34",
+  "overallPlace": 0,
+  "ageCategoryPlace": 0,
+  "race": "/api/races/1"
+}
+
+{
+  "fullName": "Paloma Mclean",
+  "finishTime": "4:04:31",
+  "distance": "long",
+  "ageCategory": "M18-25",
+  "overallPlace": 0,
+  "ageCategoryPlace": 0,
+  "race": "/api/races/1"
+}
+
+{
+  "fullName": "Willow Brock",
+  "finishTime": "3:04:30",
+  "distance": "medium",
+  "ageCategory": "M18-25",
+  "overallPlace": 0,
+  "ageCategoryPlace": 0,
+  "race": "/api/races/1"
+}
+
+{
+  "fullName": "Alissa Harris",
+  "finishTime": "5:04:24",
+  "distance": "long",
+  "ageCategory": "M18-25",
+  "overallPlace": 0,
+  "ageCategoryPlace": 0,
+  "race": "/api/races/1"
+}
+
+{
+  "fullName": "Dania Travis",
+  "finishTime": "6:04:12",
+  "distance": "long",
+  "ageCategory": "M26-34",
+  "overallPlace": 0,
+  "ageCategoryPlace": 0,
+  "race": "/api/races/1"
+}
+
+{
+  "fullName": "Lorena Villegas",
+  "finishTime": "2:09:31",
+  "distance": "medium",
+  "ageCategory": "M26-34",
+  "overallPlace": 0,
+  "ageCategoryPlace": 0,
+  "race": "/api/races/1"
+}
+
+{
+  "fullName": "Marc Rivera",
+  "finishTime": "6:23:14",
+  "distance": "long",
+  "ageCategory": "M26-34",
+  "overallPlace": 0,
+  "ageCategoryPlace": 0,
+  "race": "/api/races/1"
+}
+
+{
+  "fullName": "Ryan Roberts",
+  "finishTime": "6:15:45",
+  "distance": "long",
+  "ageCategory": "M26-34",
+  "overallPlace": 0,
+  "ageCategoryPlace": 0,
+  "race": "/api/races/1"
+}
+
+{
+  "fullName": "Sergio Spears",
+  "finishTime": "2:13:45",
+  "distance": "medium",
+  "ageCategory": "M35-43",
+  "overallPlace": 0,
+  "ageCategoryPlace": 0,
+  "race": "/api/races/1"
+}

@@ -2,26 +2,69 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use App\Controller\ImportRaceAction;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /** A Race model */
+#[Vich\Uploadable]
 #[ApiResource]
-#[Get]
-#[Post]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'title' => SearchFilterInterface::STRATEGY_PARTIAL,
+    ]
+)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: ['title', 'raceDate', 'avgTimeForMediumDistance', 'avgTimeForLongDistance']
+)]
+#[Post(
+    uriTemplate: '/races/import',
+    defaults: ['_api_receive' => false],
+    controller: ImportRaceAction::class,
+    openapi: new Operation(
+        requestBody: new RequestBody(
+            content: new \ArrayObject([
+                'multipart/form-data' => [
+                    'schema' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'file' => [
+                                'type' => 'string',
+                                'format' => 'binary',
+                            ],
+                            'title' => [
+                                'type' => 'string',
+                            ],
+                            'raceDate' => [
+                                'type' => 'datetime',
+                            ]
+                        ]
+                    ]
+                ]
+            ])
+        )
+    ),
+    validationContext: ['groups' => ['media_object_create']],
+    deserialize: 'false'
+)]
 #[GetCollection]
-#[Patch]
-#[Delete]
 #[ORM\Entity]
 class Race
 {
@@ -40,6 +83,24 @@ class Race
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Assert\NotNull]
     private ?DateTimeInterface $raceDate;
+
+    #[Vich\UploadableField(
+        mapping: 'media_object',
+        fileNameProperty: 'filePath'
+    )]
+    #[Assert\File(
+        groups: ['media_object_create'],
+        extensions: ['csv'],
+        extensionsMessage: "File must be a valid 'csv' type."
+    )]
+    #[Assert\NotNull]
+    public ?UploadedFile $file = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    public string $avgTimeForMediumDistance = '';
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    public string $avgTimeForLongDistance = '';
 
     /** @var Result[] $results All results for this race */
     #[ORM\OneToMany(mappedBy: "race", targetEntity: Result::class, cascade: ["persist", "remove"])]
@@ -96,5 +157,46 @@ class Race
     public function getResults(): Collection|array
     {
         return $this->results;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvgTimeForMediumDistance(): string
+    {
+        return $this->avgTimeForMediumDistance;
+    }
+
+    /**
+     * @param string $avgTimeForMediumDistance
+     */
+    public function setAvgTimeForMediumDistance(string $avgTimeForMediumDistance): void
+    {
+        $this->avgTimeForMediumDistance = $avgTimeForMediumDistance;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvgTimeForLongDistance(): string
+    {
+        return $this->avgTimeForLongDistance;
+    }
+
+    /**
+     * @param string $avgTimeForLongDistance
+     */
+    public function setAvgTimeForLongDistance(string $avgTimeForLongDistance): void
+    {
+        $this->avgTimeForLongDistance = $avgTimeForLongDistance;
+    }
+
+    public function addResult(Result $result): self
+    {
+        if (!$this->results->contains($result)) {
+            $result->setRace($this);
+        }
+
+        return $this;
     }
 }
